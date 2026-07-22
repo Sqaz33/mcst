@@ -1,0 +1,50 @@
+L0:
+%i1 = 0
+%sum1 = 0
+%x1 = %a
+%y1 = %b
+goto L1
+
+L1:
+%x2 = phi([%x1, L0], [%x5, L6])
+%y2 = phi([%y1, L0], [%y6, L6])
+%sum2 = phi([%sum1, L0], [%sum5, L6])
+%i2 = phi([%i1, L0], [%i3, L6])
+if %i2 < %n goto L2 else goto L8
+
+L2:
+if %x2 > %y2 goto L3 else goto L4
+
+L3:
+%x3 = %x2 - %y2
+%sum3 = %sum2 + %x3
+goto L5
+
+L4:
+%y3 = %y2 - %x2
+%sum4 = %sum2 + %y3
+goto L5
+
+L5:
+%x4 = phi([%x2, L4], [%x3, L3])
+%y4 = phi([%y2, L3], [%y3, L4])
+%sum5 = phi([%sum3, L3], [%sum4, L4])
+if %sum5 < %limit goto L6 else goto L7
+
+L6:
+%y6 = phi([%y4, L5], [%y5, L7])
+%i3 = %i2 + 1
+%x5 = %x4 + %i3
+goto L1
+
+L7:
+%y5 = %y4 + %sum5
+if %y5 < 100 goto L6 else goto L8
+
+L8:
+%x6 = phi([%x2, L1], [%x4, L7])
+%y7 = phi([%y2, L1], [%y5, L7])
+%sum6 = phi([%sum2, L1], [%sum5, L7])
+%result1 = %sum6 + %x6
+%result2 = %result1 + %y7
+return %result2

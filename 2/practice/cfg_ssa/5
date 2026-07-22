@@ -1,0 +1,82 @@
+L0:
+if a > b goto L1 else goto L2
+
+L1:
+x = a - b
+goto L3
+
+L2:
+x = b - a
+if x > 10 goto L4 else goto L5
+
+L3:
+y = x * 2
+if y < limit goto L5 else goto L6
+
+L4:
+y = x + 1
+goto L6
+
+L5:
+y = x - 1
+z = y + a
+goto L7
+
+L6:
+z = y + b
+if z > 0 goto L7 else goto L8
+
+L7:
+result = x + y
+result = result + z
+return result
+
+L8:
+result = x - y
+return result
+
+
+
+
+L0:
+if %a > %b goto L1 else goto L2
+
+L1:
+%x1 = %a - %b
+goto L3
+
+L2:
+%x2 = %b - %a
+if %x2 > 10 goto L4 else goto L5
+
+L3:
+%y1 = %x1 * 2
+if %y1 < %limit goto L5 else goto L6
+
+L4:
+%y2 = %x2 + 1
+goto L6
+
+L5:
+%x3 = phi([%x2, L2], [%x1, L3])
+%y3 = %x3 - 1
+%z1 = %y3 + %a
+goto L7
+
+L6:
+%x4 = phi([%x1, L3], [%x2, L4])
+%y4 = phi([%y1, L3], [%y2, L4])
+%z2 = %y4 + %b
+if %z2 > 0 goto L7 else goto L8
+
+L7:
+%x5 = phi([%x3, L5], [%x4, L6])
+%y5 = phi([%y3, L5], [%y4, L6])
+%z3 = phi([%z1, L5], [%z2, L6])
+%result1 = %x5 + %y5
+%result2 = %result1 + %z3
+return %result2
+
+L8:
+%result3 = %x4 - %y4
+return %result3

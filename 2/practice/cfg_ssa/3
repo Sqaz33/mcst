@@ -1,0 +1,86 @@
+L0:
+i = 0
+sum = 0
+x = a
+y = b
+goto L1
+
+L1:
+if i < n goto L2 else goto L7
+
+L2:
+if x < y goto L3 else goto L4
+
+L3:
+sum = sum + x
+x = x + 2
+goto L5
+
+L4:
+sum = sum + y
+y = y - 1
+goto L5
+
+L5:
+if sum < 50 goto L6 else goto L7
+
+L6:
+i = i + 1
+temp = x
+x = y
+y = temp
+goto L1
+
+L7:
+result = sum + x
+result = result + y
+return result
+
+
+L0:
+%i1 = 0
+%sum1 = 0
+%x1 = %a
+%y1 = %b
+goto L1
+
+L1:
+%i2 = phi([%i1, L0], [%i3, L6])
+%sum2 = phi([%sum1, L0], [%sum5, L6])
+%x2 = phi([%x1, L0], [%x5, L6])
+%y2 = phi([%y1, L0], [%y5, L6])
+if %i2 < %n goto L2 else goto L7
+
+L2:
+if %x2 < %y2 goto L3 else goto L4
+
+L3:
+%sum3 = %sum2 + %x2
+%x3 = %x2 + 2
+goto L5
+
+L4:
+%sum4 = %sum2 + %y2
+%y3 = %y2 - 1
+goto L5
+
+L5:
+%sum5 = phi([%sum3, L3], [%sum4, L4])
+%x4 = phi([%x3, L3], [%x2, L4])
+%y4 = phi([%y2, L3], [%y3, L4])
+if %sum5 < 50 goto L6 else goto L7
+
+L6:
+%i3 = %i2 + 1
+%temp1 = %x4
+%x5 = %y4
+%y5 = %temp1
+goto L1
+
+L7:
+%sum6 = phi([%sum2, L1], [%sum5, L5])
+%x6 = phi([%x2, L1], [%x4, L5])
+%y6 = phi([%y2, L1], [%y4, L5])
+%result1 = %sum6 + %x6
+%result2 = %result1 + %y6
+return %result2

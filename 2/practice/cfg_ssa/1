@@ -1,0 +1,34 @@
+1. x = a + b
+2. y = a
+3. if x > 0 goto L1 else goto L2
+
+4. L1:
+5. x = x * 2
+6. goto L3
+
+7. L2:
+8. y = b - a
+9. goto L3
+
+10. L3:
+11. z = x + y
+12. return z
+
+L0:
+%x1 = %a1 + %b1
+%y1 = %a1
+if %x1 > 0 goto L1 else goto L2
+
+L1:
+%x2 = %x1 * 2
+goto L3
+
+L2:
+%y2 = %b1 - %a1
+goto L3
+
+L3:
+%x3 = phi([%x1, L0], [%x2, L1])
+%y3 = phi([%y1, L0], [%y2, L2])
+%z1 = %x3 + %y3
+return %z1

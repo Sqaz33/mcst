@@ -1,0 +1,22 @@
+L0:
+%c1 = 4
+%c2 = 2
+if %flag goto L1 else goto L2
+
+L1:
+%x1 = 6
+%p1 = 18
+goto L3
+
+L2:
+%x2 = 6
+%p2 = 18
+goto L3
+
+L3:
+%x3 = 6
+%p3 = 18
+%y1 = 108
+%y2 = 104
+%z1 = 104 + %a
+return %z1

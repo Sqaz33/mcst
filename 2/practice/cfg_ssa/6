@@ -1,0 +1,98 @@
+L0:
+i = 0
+sum = 0
+x = a
+goto L1
+
+L1:
+if i < n goto L2 else goto L8
+
+L2:
+if x < 0 goto L3 else goto L4
+
+L3:
+x = 0 - x
+goto L5
+
+L4:
+sum = sum + x
+if sum > limit goto L7 else goto L5
+
+L5:
+i = i + 1
+r = i % 2
+if r == 0 goto L6 else goto L1
+
+L6:
+x = x - 1
+goto L1
+
+L7:
+x = sum - i
+goto L8
+
+L8:
+if x > b goto L9 else goto L10
+
+L9:
+result = x + b
+return result
+
+L10:
+result = sum - b
+return result
+
+
+
+
+
+L0:
+%i1 = 0
+%sum1 = 0
+%x1 = %a
+goto L1
+
+L1:
+%x2 = phi([%x1, L0], [%x4, L5], [%x5, L6])
+%sum2 = phi([%sum1, L0], [%sum4, L5], [%sum4, L6])
+%i2 = phi([%i1, L0], [%i3, L5], [%i3, L6])
+if %i2 < %n goto L2 else goto L8
+
+L2:
+if %x2 < 0 goto L3 else goto L4
+
+L3:
+%x3 = 0 - %x2 
+goto L5
+
+L4:
+%sum3 = %sum2 + %x2
+if %sum3 > %limit goto L7 else goto L5
+
+L5:
+%x4 = phi([%x2, L3], [%x3, L4])
+%sum4 = phi([%sum2, L3], [%sum3, L4])
+%i3 = %i2 + 1
+%r = %i3 % 2
+if %r == 0 goto L6 else goto L1
+
+L6:
+%x5 = %x4 - 1
+goto L1
+
+L7:
+%x6 = %sum3 - %i2
+goto L8
+
+L8:
+%x7 = phi([%x2, L1], [%x6, L7])
+%sum5 = phi([%sum2, L1], [%sum3, L7])
+if %x7 > %b goto L9 else goto L10
+
+L9:
+%result1 = %x7 + %b
+return %result1
+
+L10:
+%result2 = %sum5 - %b
+return %result2

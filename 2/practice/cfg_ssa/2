@@ -1,0 +1,134 @@
+L0:
+i = 0
+sum = 0
+x = a
+n = 100
+goto L1
+
+L1:
+if i < n goto L2 else goto L6
+
+L2:
+if x > i goto L3 else goto L4
+
+L3:
+sum = sum + x
+x = x - 1
+goto L5
+
+L4:
+sum = sum + i
+x = x + 2
+goto L5
+
+L5:
+i = i + 1
+if sum < 100 goto L1 else goto L6
+
+L6:
+result = sum + x
+return result
+
+
+L0:
+%i1 = 0
+%sum1 = 0
+%x1 = %a
+goto L1
+
+L1:
+%i2 = phi([%i1, L0], [%i3, L5])
+%sum2 = phi([%sum1, L0], [%sum5, L5])
+%x2 = phi([%x1, L0], [%x5, L5])
+if %i2 < %n goto L2 else goto L6
+
+L2:
+if %x2 > %i2 goto L3 else goto L4
+
+L3:
+%sum3 = %sum2 + %x2
+%x3 = %x2 - 1
+goto L5
+
+L4:
+%sum4 = %sum2 + %i2
+%x4 = %x2 + 2
+goto L5
+
+L5:
+%sum5 = phi([%sum3, L3], [%sum4, L4])
+%x5 = phi([%x3, L3], [%x4, L4])
+%i3 = %i2 + 1
+if %sum5 < 100 goto L1 else goto L6
+
+L6:
+%sum6 = phi([%sum2, L1], [%sum5, L5])
+%x6 = phi([%x2, L1], [%x5, L5])
+%result1 = %sum6 + %x6
+return %result1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+L0:
+%i1 = 0
+%sum1 = 0
+%x1 = a
+%n1 = 100
+goto L1
+
+L1:
+%i2 = phi([%i1, L0], [%i5, L5])
+if i < %n1 goto L2 else goto L6
+
+L2:
+%x2 = phi([%x1, L0], [%x4, L3], [%x6, L4])
+if %x2 > %i2 goto L3 else goto L4
+
+L3:
+%x3 = phi([%x1, L0], [%x6, L4])
+%sum2 = phi([%sum1, L0], [%sum5, L4])
+%sum3 = %sum2 + %x3
+%x4 = %x3 - 1
+goto L5
+
+L4:
+%i3 = phi([%i1, L0], [%i5, L5])
+%x5 = phi([%x1, L0], [%x4, L3])
+%sum4 = phi([%sum1, L0], [%sum3, L3])
+%sum5 = %sum4 + %i3
+%x6 = %x6 + 2
+goto L5
+
+L5:
+%i4 = phi([%i1, L0], [%i5, L5])
+%i5 = %i4 + 1
+%sum6 = phi([%sum3, L3], [%sum5, L4])
+if %sum6 < 100 goto L1 else goto L6
+
+L6:
+%x7 = phi([%x1, L0], [%x4, L3], [%x6, L4])
+%sum7 = phi([%sum1, L0], [%sum3, L3], [%sum5, L4])
+%result1 = %sum7 + %x7
+return %result1

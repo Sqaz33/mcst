@@ -1,0 +1,22 @@
+L0:
+%c1 = 5
+%c2 = 2
+%t1 = 10
+if %flag goto L1 else goto L2
+
+L1:
+%x1 = 12
+%q1 = 3
+goto L3
+
+L2:
+%x2 = 8
+%q2 = 3
+goto L3
+
+L3:
+%x3 = phi([12, L1], [8, L2])
+%q3 = 3
+%y1 = 12
+%z1 = %x3 + 12
+return %z1
