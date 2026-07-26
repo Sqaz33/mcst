@@ -1,0 +1,29 @@
+L0:
+%c1 = 5
+%t1 = 8
+if true goto L1 else goto L2
+
+L1:
+%x1 = 16
+goto L3
+
+L2:
+%x2 = %a + 1
+goto L3
+
+L3:
+%x3 = 16
+%y1 = 10
+if true goto L4 else goto L5
+
+L4:
+%z1 = 30
+goto L6
+
+L5:
+%z2 = %y1 + %a
+goto L6
+
+L6:
+%z3 = 30
+return 30

@@ -1,0 +1,96 @@
+function main(%a, %b, %flag1, %flag2):
+
+L0:
+%t1 = %a + %b
+%d1 = %a - %b
+if %flag1 goto L1 else goto L2
+
+L1:
+%p1 = %a * %b
+if %flag2 goto L3 else goto L4
+
+L2:
+%p0 = %a + 1
+goto L4
+
+L3:
+%x1 = %a + %b
+goto L4
+
+L4:
+%m1 = phi([%p1, L1], [%p0, L2], [%p1, L3])
+%p2 = %a * %b
+%t2 = %a + %b
+%r1 = %p2 + %t2
+%r2 = %p2 + %t1
+%d2 = %d1 * 2
+%s1 = %r2 + %m1
+return %s1
+
+-------------------------------------------------
+Pa = {a}; Pb = {b}; Pflag1 = {flag1}; Pflag2 = {flag2}
+Pphi = {%m1}
+
+P+ = {t1, p0, x1, t2, r1, r2, s1}
+P- = {d1}
+P* = {p1, p2, d2}
+
+
+Бью p+ по t1:
+P+ = {t1, p0, x1, t2, r1, r2, s1}
+
+P+1 = {t1, x1, t2}
+P+2 = {p0, r1, r2, s1}
+
+Бью P+2 по p0
+P+2' = {p0}
+P+3 = {r1, r2}
+P+4 = {s1}
+
+Бью P* по p1
+P*1 = {p1, p2}
+P*2 = {d2}
+
+Итого:
+Pa = {a}; Pb = {b}; Pflag1 = {flag1}; Pflag2 = {flag2}
+Pphi = {%m1}
+P+1 = {t1, x1, t2}
+P+2' = {p0}
+P+3 = {r1, r2}
+P+4 = {s1}
+P*1 = {p1, p2}
+P*2 = {d2}
+P- = {d1}
+
+-------------------------------------------------
+t1 dom x1, t2
+r1 dom r2
+
+
+function main(%a, %b, %flag1, %flag2):
+L0:
+%t1 = %a + %b
+%d1 = %a - %b
+if %flag1 goto L1 else goto L2
+
+L1:
+%p1 = %a * %b
+if %flag2 goto L3 else goto L4
+
+L2:
+%p0 = %a + 1
+goto L4
+
+L3:
+%x1 = %t1
+goto L4
+
+L4:
+%m1 = phi([%p1, L1], [%p0, L2], [%p1, L3])
+%p2 = %a * %b
+%t2 = %t1
+%r1 = %p2 + %t2
+%r2 = %r1
+%d2 = %d1 * 2
+%s1 = %r2 + %m1
+return %s1

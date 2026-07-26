@@ -44,8 +44,6 @@ return result
 
 
 
-
-
 L0:
 %i1 = 0
 %sum1 = 0

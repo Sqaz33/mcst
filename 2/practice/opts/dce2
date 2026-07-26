@@ -1,0 +1,20 @@
+function main(%a, %b, %flag, %ptr):
+
+L0:
+%t1 = %a + %b
+call print(%t1)
+%r1 = call update(%b)
+store %t1 -> [%ptr]
+if %flag goto L1 else goto L2
+
+L1:
+%x1 = %t1 * 2
+call log(%x1)
+goto L3
+
+L2:
+call log(%t1)
+goto L3
+
+L3:
+return %t1

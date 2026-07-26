@@ -1,0 +1,30 @@
+function main(%a, %b, %flag):
+L0:
+if %flag goto L1 else goto L2
+
+L1:
+%x = %a
+goto F0
+
+F0:
+if %x > 0 goto F1 else goto F2
+
+F1:
+%r1 = %x + 1
+goto L1_2
+
+F2:
+%r2 = 0
+goto L1_2
+
+L1_2:
+%v1 = phi([%r1, F1], [%r2, F2])
+goto L3
+
+L2:
+%v2 = %b + 1
+goto L3
+
+L3:
+%v3 = phi([%v1, L1_2], [%v2, L2])
+return %v3

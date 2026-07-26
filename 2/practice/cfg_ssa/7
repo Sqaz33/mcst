@@ -1,0 +1,32 @@
+L0:
+%x1 = %a
+%y1 = %b
+goto L1
+
+L1:
+%x2 = phi([%x1, L0], [%x2, L4],[%x5, L5])
+%y2 = phi([%y1, L0], [%y3, L4], [%y4, L5])
+if %x2 < %limit goto L2 else goto L6
+
+L2:
+if %flag goto L3 else goto L4
+
+L3:
+%x3 = %x2 + %y2
+goto L5
+
+L4:
+%y3 = %y2 + 1
+if %y3 < 10 goto L1 else goto L5
+
+L5:
+%x4 = phi([%x3, L3], [%x2, L4])
+%y4 = phi([%y2, L3], [%y3, L4])
+%x5 = %x4 - 1
+if %x5 > 0 goto L1 else goto L6
+
+L6:
+%x6 = phi([%x5, L5], [%x2, L1])
+%y5 = phi([%y4, L5], [%y2, L1])
+%result = %x6 + %y5
+return %result

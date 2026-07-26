@@ -1,0 +1,25 @@
+function main(%a, %b, %flag):
+
+L0:
+if %flag goto L1 else goto L2
+
+L1:
+%x1 = %a + 1
+goto L3
+
+L2:
+%x2 = %b + 1
+goto L3
+
+L3:
+%x4 = phi([%x1, L1], [%x2, L2])
+goto L4
+
+L4:
+%y1 = %x4 * 2
+%unused1 = %a + 100
+goto L6
+
+L6:
+%y4 = %y1
+return %y4

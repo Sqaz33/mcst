@@ -27,7 +27,6 @@ a join b = элемент, которому предшествуют a и b (lea
 
 a meet b = элемент, который предшествует a и b (greatest lower bound)
 
-
 # Constant propagation
 
 ## Spare constant propagation
@@ -90,3 +89,27 @@ void propagate(Instruction I, Value NewVal) {
 ![1784738865705](images/acyclic_opt/1784738865705.png)
 
 ![1784738873436](images/acyclic_opt/1784738873436.png)
+
+## Value Numbering
+
+### Local Value Numbering
+
+Отображение DAG фрагментов (номер) на номер и переменных на номер.
+
+Нумерация
+
+## DCE
+
+* бимап value - кол. юзеров
+* пока есть value в бимап с 0 юзеров
+* взять value с 0 юзеров
+* уменьшить кол. юзеров у операндов value
+* удалить из кода value
+
+## UCE
+
+* бимап бб - кол. входов
+* пока есть бб в бимап с 0 входов
+* взять бб с 0 юзеров
+* уменьшить кол. входов у входных из этого бб
+* удалить бб из ф-ции

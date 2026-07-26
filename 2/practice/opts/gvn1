@@ -1,0 +1,81 @@
+function main(%a, %b, %flag):
+
+L0:
+%t1 = %a + %b
+if %flag goto L1 else goto L2
+
+L1:
+%x1 = %a + %b
+%p1 = %a * %b
+goto L3
+
+L2:
+%x2 = %t1 + 1
+goto L3
+
+L3:
+%x3 = phi([%x1, L1], [%x2, L2])
+%p2 = %a * %b
+%q1 = %a + %b
+%r1 = %p2 + %q1
+%r2 = %p2 + %t1
+%s1 = %r2 + %x3
+return %s1
+
+--------------------------------------------
+Pa = {a} 
+Pb = {b}
+Pflag = {flag}
+P+ = {t1, x1, x2, q1, r1, r2, s1}
+P* = {p1, p2}
+Pphi = {x3}
+
+Затем бью P+ по t1
+
+P+1 = {t1, x1, q1}
+P+2 = {x2, r1, r2, s1}
+
+Затем P2 сразу бью на все по разным пакетам
+
+P+2' = {x2}
+P+3 = {r1, r2}
+P+4 = {s1}
+
+Итого:
+Pa = {a} 
+Pb = {b}
+Pflag = {flag}
+Pphi = {x3}
+P+1 = {t1, x1, q1}
+P+2' = {x2}
+P+3 = {r1, r2}
+P+4 = {s1}
+P* = {p1, p2} // PRE но я не буду его трогать
+
+--------------------------------------------
+
+t1 dom x1, q1; r1 dom r2; 
+
+function main(%a, %b, %flag):
+L0:
+%t1 = %a + %b
+if %flag goto L1 else goto L2
+
+L1:
+%x1 = %t1
+%p1 = %a * %b
+goto L3
+
+L2:
+%x2 = %t1 + 1
+goto L3
+
+L3:
+%x3 = phi([%x1, L1], [%x2, L2])
+%p2 = %a * %b
+%q1 = %t1
+%r1 = %p2 + %q1
+%r2 = %r1
+%s1 = %r2 + %x3
+return %s1
+

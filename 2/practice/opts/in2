@@ -1,0 +1,28 @@
+function choose(%x):
+F0:
+if %x > 0 goto F1 else goto F2
+
+F1:
+%r1 = %x + 1
+return %r1
+
+F2:
+%r2 = 0
+return %r2
+
+
+function main(%a, %b, %flag):
+L0:
+if %flag goto L1 else goto L2
+
+L1:
+%v1 = call choose(%a)
+goto L3
+
+L2:
+%v2 = %b + 1
+goto L3
+
+L3:
+%v3 = phi([%v1, L1], [%v2, L2])
+return %v3
