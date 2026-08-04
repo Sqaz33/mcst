@@ -1,0 +1,109 @@
+enum LatticeValue {
+    Unknown,          // значение пока неизвестно
+    Constant(c),      // известная константа c
+    Overdefined       // значение не является одной константой
+}
+
+Value = Map<SSAValue, LatticeValue>()
+
+function meet(a, b):
+    if a == Unknown:
+        return b
+
+    if b == Unknown:
+        return a
+
+    if a == Overdefined or b == Overdefined:
+        return Overdefined
+
+    // Здесь оба значения — константы
+    if a.value == b.value:
+        return a
+
+    return Overdefined
+
+
+function evaluate(I):
+    // x = c
+    if I is ConstantAssignment(c):
+        return Constant(c)
+
+    // x = y
+    if I is Copy(y):
+        return Value[y]
+
+    // x = phi(y1, y2, ..., yn)
+    if I is Phi(y1, y2, ..., yn):
+        result = Unknown
+
+        // В SCP учитываются ВСЕ входы φ.
+        for operand in I.operands:
+            result = meet(result, Value[operand])
+
+        return result
+
+    // x = op(y1, y2, ..., yn)
+    if I is Operation(op, operands):
+        if any Value[x] == Overdefined for x in operands:
+            return Overdefined
+
+        if all Value[x] is Constant for x in operands:
+            return Constant(
+                fold(op, constants_of(operands))
+            )
+
+        return Unknown
+
+    // load, неизвестный call, параметр функции и т. п.
+    return Overdefined
+
+
+function SCP(function):
+    WorkList = Queue<SSAValue>()
+
+    // Инициализация решётки.
+    for value in function.ssa_values:
+        Value[value] = Unknown
+
+    // Входные значения заранее неизвестны.
+    for value in function.parameters:
+        Value[value] = Overdefined
+        WorkList.push(value)
+
+    // Значения, определённые непосредственно константами.
+    for instruction in function.instructions:
+        if instruction is "x = constant c":
+            Value[x] = Constant(c)
+            WorkList.push(x)
+
+        else if instruction has result and
+                instruction does not depend on SSA operands:
+            Value[instruction.result] = evaluate(instruction)
+
+            if Value[instruction.result] != Unknown:
+                WorkList.push(instruction.result)
+
+    // Продвижение по SSA def-use связям.
+    while not WorkList.empty():
+        changedValue = WorkList.pop()
+
+        for instruction in ssa_users(changedValue):
+            if instruction has no result:
+                continue
+
+            result = instruction.result
+            oldValue = Value[result]
+            newValue = evaluate(instruction)
+
+            if newValue == oldValue:
+                continue
+
+            Value[result] = newValue
+            WorkList.push(result)
+
+    // Преобразование программы.
+    for value in function.ssa_values:
+        if Value[value] is Constant(c):
+            replace_all_uses(value, c)
+
+    fold_constant_expressions(function)
