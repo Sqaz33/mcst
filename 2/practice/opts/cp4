@@ -1,0 +1,49 @@
+L0:
+%i1 = 0
+%x1 = 4
+%k1 = 2
+goto L1
+
+L1:
+%i2 = phi([%i1, L0], [%i4, L3])
+%x2 = phi([%x1, L0], [%x3, L3])
+%k2 = 2
+if %i2 < %n goto L2 else goto L4
+
+L2:
+%t1 = 5
+%x3 = %x2 + 5
+%i3 = %i2
+%k3 = 2
+goto L3
+
+L3:
+%t2 = %i3 + 1
+%i4 = %t2
+goto L1
+
+L4:
+%y1 = 10
+%result1 = %x2 + 10
+return %result1
+
+-------------------------- dce + copy propagation
+L0:
+goto L1
+
+L1:
+%i2 = phi([0, L0], [%t2, L3])
+%x2 = phi([4, L0], [%x3, L3])
+if %i2 < %n goto L2 else goto L4
+
+L2:
+%x3 = %x2 + 5
+goto L3
+
+L3:
+%t2 = %i2 + 1
+goto L1
+
+L4:
+%result1 = %x2 + 10
+return %result1

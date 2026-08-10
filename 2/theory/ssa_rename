@@ -1,0 +1,42 @@
+rename(B):
+    Pushed = пустая таблица
+
+    // 1. Определения, создаваемые phi
+    for Phi in phis(B):
+        v = original_variable(Phi)
+        new_v = fresh_name(v)
+
+        Phi.result = new_v
+        Stack[v].push(new_v)
+        Pushed[v]++
+
+    // 2. Обычные инструкции
+    for I in instructions(B), кроме phi:
+
+        // Сначала переименовываем использования
+        for operand in uses(I):
+            v = original_variable(operand)
+            operand = Stack[v].top()
+
+        // Затем переименовываем определение
+        if I defines variable v:
+            new_v = fresh_name(v)
+
+            I.result = new_v
+            Stack[v].push(new_v)
+            Pushed[v]++
+
+    // 3. Заполняем phi в блоках-последователях
+    for S in successors(B):
+        for Phi in phis(S):
+            v = original_variable(Phi)
+            Phi.argument_from(B) = Stack[v].top()
+
+    // 4. Идём по дереву доминаторов, не по CFG
+    for C in dominator_tree_children(B):
+        rename(C)
+
+    // 5. Восстанавливаем стеки
+    for each variable v:
+        repeat Pushed[v] times:
+            Stack[v].pop()
