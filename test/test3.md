@@ -206,6 +206,7 @@ RET r4_1
 
 # Оптимизации
 
+```armasm
 foo():
 PARAMETERS: r1_1, r2_1
 MOV 0 -> r3_1
@@ -251,6 +252,7 @@ CMPL r6_6 N -> p2_2
 BRANCH p2_2 LOOP2
 RET r2_6
 RET r4_1
+```
 
 # scp для main
 
@@ -306,6 +308,7 @@ r6_6: top,
 p2_2: top
 }
 
+```armasm
 foo():
 PARAMETERS: r1_1, r2_1
 MOV 0 -> r3_1
@@ -351,6 +354,7 @@ CMPL r6_6 3 -> p2_2
 BRANCH p2_2 LOOP2
 RET r2_6
 RET 7
+```
 
 ### 2. DCE и UCE и SCP для main и foo
 
@@ -374,6 +378,7 @@ main scp:
 
 1. продвижение копирования r2_3->r2_4
 
+```armasm
 foo():
 PARAMETERS: r1_1, r2_1
 ADD r1_1 r2_1 -> r5_1
@@ -403,9 +408,11 @@ ADD r6_5 1 -> r6_6
 CMPL r6_6 3 -> p2_2
 BRANCH p2_2 LOOP2
 RET r2_6
+```
 
 # main inline
 
+```armasm
 main():
 ENTRY:
 
@@ -440,9 +447,11 @@ ADD r6_5 1 -> r6_6
 CMPL r6_6 3 -> p2_2
 BRANCH p2_2 LOOP2
 RET r2_6
+```
 
 # main scp
 
+```armasm
 main():
 ENTRY:
 
@@ -476,9 +485,11 @@ ADD r6_5 1 -> r6_6
 CMPL r6_6 3 -> p2_2
 BRANCH p2_2 LOOP2
 RET r2_6
+```
 
 # main dce
 
+```armasm
 main():
 ENTRY:
 
@@ -502,6 +513,7 @@ ADD r6_5 1 -> r6_6
 CMPL r6_6 3 -> p2_2
 BRANCH p2_2 LOOP2
 RET r2_6
+```
 
 # unroll loop1
 
@@ -509,22 +521,23 @@ RET r2_6
 итерация 2: r6 = 2, 3 > 2 = true
 итерация 3: r6 = 3, 3 > 3 = false
 
+```armasm
 main():
 
 ENTRY:
 
 LOOP1:
-\# it1
+# it1
 ADD 2 3 -> r5_1a
 MUL 2 r5_1a -> r6_1a
 ADD 1 r6_1a -> r2_3a
 ADD 0 1 -> r6_3a
-\# it2
+# it2
 ADD 2 r2_3a -> r5_1b
 MUL 2 r5_1b -> r6_1b
 ADD 1 r6_1b -> r2_3b
 ADD r6_3a 1 -> r6_3b
-\# it3
+# it3
 ADD 2 r2_3b -> r5_1c
 MUL 2 r5_1c -> r6_1c
 ADD 1 r6_1c -> r2_3c
@@ -541,9 +554,11 @@ ADD r6_5 1 -> r6_6
 CMPL r6_6 3 -> p2_2
 BRANCH p2_2 LOOP2
 RET r2_6
+```
 
 # scp main
 
+```armasm
 main():
 
 ENTRY:
@@ -575,9 +590,11 @@ ADD r6_5 1 -> r6_6
 CMPL r6_6 3 -> p2_2
 BRANCH p2_2 LOOP2
 RET r2_6
+```
 
 # dce main():
 
+```armasm
 main():
 
 ENTRY:
@@ -595,6 +612,7 @@ ADD r6_5 1 -> r6_6
 CMPL r6_6 3 -> p2_2
 BRANCH p2_2 LOOP2
 RET r2_6
+```
 
 # unroll loop2
 
@@ -602,6 +620,7 @@ RET r2_6
 итерация 2: r6 = 2, 3 > 2 = true
 итерация 3: r6 = 3, 3 > 3 = false
 
+```armasm
 main():
 
 ENTRY:
@@ -620,8 +639,11 @@ ADD r2_6b 8 -> r2_6c
 ADD r6_6b 1 -> r6_6c
 
 RET r2_6c
+```
 
-#scp main
+# scp main
+
+```armasm
 main():
 ENTRY:
 LOOP1:
@@ -646,8 +668,11 @@ LOOP1:
 LABEL1:
 LOOP2:
 RET 83
+```
 
 # можно очистить от меток
 
+```armasm
 main():
 RET 83
+```
